@@ -107,7 +107,8 @@ bool checkPrime(long inputedInt)
    
    int j = 2; // the denomenator, j, starts at one less than the numerator, i.
 
-   while (j <= inputedInt/2 && isPrime) //  decrement j in the while loop until a factor (j) is found or get up to half of the number being tested for primeness.
+   //while (j <= inputedInt/2 && isPrime) //  decrement j in the while loop until a factor (j) is found or get up to half of the number being tested for primeness.
+    while (j <= sqrt(inputedInt) && isPrime)
    {
       if (inputedInt % j == 0) // means i was divisible by j and therefore has a factor, so NOT prime
         isPrime = false; // now we know i is not Prime
