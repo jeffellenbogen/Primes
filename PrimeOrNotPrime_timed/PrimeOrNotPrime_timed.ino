@@ -18,6 +18,8 @@ int notPrimeLEDpin = 7;
 int testPin = 4;
 bool LEDstate = true;
 
+bool sqrtMode = true;
+
 void setup()
 {
   
@@ -104,11 +106,17 @@ bool checkPrime(long inputedInt)
       time_ellapsed = millis() - start_time;
       return !isPrime;
    }
-   
+   long cutOff;
    int j = 2; // the denomenator, j, starts at one less than the numerator, i.
+   
+   if (sqrtMode) 
+     cutOff = long(sqrt(inputedInt));
+   else 
+     cutOff = inputedInt/2;
 
-   //while (j <= inputedInt/2 && isPrime) //  decrement j in the while loop until a factor (j) is found or get up to half of the number being tested for primeness.
-    while (j <= sqrt(inputedInt) && isPrime)
+
+ 
+   while (j <= (cutOff) && isPrime) //  decrement j in the while loop until a factor (j) is found or get up to half of the number being tested for primeness.
    {
       if (inputedInt % j == 0) // means i was divisible by j and therefore has a factor, so NOT prime
         isPrime = false; // now we know i is not Prime
