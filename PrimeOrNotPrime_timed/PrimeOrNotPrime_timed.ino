@@ -10,8 +10,8 @@ char receivedChars[numChars];
 bool newData = false;
 long dataNumber = 0;
 
-static unsigned long start_time, time_ellapsed, toggle_timer;
-static unsigned long toggleDelay = 1000;
+static unsigned long start_time, time_ellapsed, toggle_timer_start;
+int toggleDelay = 250;
 
 int primeLEDpin = 12;
 int notPrimeLEDpin = 7;
@@ -93,13 +93,11 @@ long getInputAsLong(void)
 **********************/
 bool checkPrime(long inputedInt)
 {
-
-   
    Serial.println("Checking........");
    digitalWrite(primeLEDpin,LOW);
    digitalWrite(notPrimeLEDpin,LOW);
    start_time = millis();
-   toggle_timer = toggleDelay;
+   toggle_timer_start = start_time;
    bool isPrime = true; // assume each value of i is prime until proven otherwise. Any instance of a value of j that is less than i and greater than 1 that is a factor of i means i is Not Prime
    if (inputedInt < 2)
    {
@@ -114,21 +112,19 @@ bool checkPrime(long inputedInt)
       if (inputedInt % j == 0) // means i was divisible by j and therefore has a factor, so NOT prime
         isPrime = false; // now we know i is not Prime
       j++;
-      //Serial.println(j);
 
       //This code below pulsed the lights on and off alternating every second, but slows the processing down considerably
       
-      time_ellapsed = millis() - start_time;
-      toggle_timer = toggleDelay - time_ellapsed;
-      if (toggle_timer < 5)
+      if (millis()-toggle_timer_start > toggleDelay)
       {
-        toggle_timer = toggleDelay;
+        toggle_timer_start = millis();
         toggleLEDs();
-        Serial.println("TOGGLE");
+        //Serial.println("TOGGLE");
       }      
+      
 
    }
-  // time_ellapsed = millis() - start_time; // comment this out if using pulsing lights during checking...
+   time_ellapsed = millis() - start_time; // comment this out if using pulsing lights during checking...
 
    return isPrime;
 }
