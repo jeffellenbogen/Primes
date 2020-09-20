@@ -1,5 +1,5 @@
 //For more info on prime numbers https://en.wikipedia.org/wiki/List_of_prime_numbers
-//Big primes to try: 27644437, 331777, 193939, 4409
+//Big primes to try: 27644437, 16769023, 331777, 193939, 4409
 
 // Create Prime factorization program that stores into an array and prints all factors including duplicates
 // Implement square root instead of stopping at half the prime candidate
@@ -18,31 +18,67 @@ int notPrimeLEDpin = 7;
 int testPin = 4;
 bool LEDstate = true;
 
-bool sqrtMode = true;
+bool sqrtMode = false;
+
+void getMode()
+{
+  Serial.println("Choose how to calculate whether an integer is prime...");
+  Serial.println("1. halfCandidateMode ");
+  Serial.println("2. sqrtMode");
+  while (!newData)
+  {
+    long modeSelected = getInput();
+    if (newData)
+    {
+      if (modeSelected == 1)
+      {
+        Serial.println("modeSelected = halfCandidateMode");
+        sqrtMode = false;
+      }
+      else if (modeSelected == 2)
+      {
+        Serial.println("modeSelected = sqrtMode");
+        sqrtMode = true;
+      }
+      else
+      {
+        Serial.println("error! selecting sqrtMode automatically because it is faster");
+        sqrtMode = true;
+      }
+    }  
+  }
+  newData = false;
+  Serial.println("");
+  Serial.println("Enter an integer to determine if it is prime or not...");
+}
+
 
 void setup()
 {
   
   Serial.begin(9600);
-  Serial.println("Enter an integer to determine if it is prime or not...");
   pinMode(primeLEDpin,OUTPUT);
   pinMode(notPrimeLEDpin,OUTPUT);
   pinMode(testPin, OUTPUT);
   digitalWrite(testPin, LOW);
   digitalWrite(primeLEDpin,LOW);
   digitalWrite(notPrimeLEDpin,LOW);
-
+  
+  getMode();
 }
 
 void loop()
 {
-   long inputedValue = getInputAsLong();
+   
+   long inputedValue = getInput();
    if (newData)
    {
       bool isItPrime = checkPrime(inputedValue);
       printOutResult(inputedValue, isItPrime);
    }
 }
+
+
 
 void toggleLEDs()
 { 
@@ -52,9 +88,9 @@ void toggleLEDs()
 }
 
 /**********************
-* getInteger will take an input from Serial and determine if an integer was input
+* getInput will take an input from Serial and determine if an integer was input
 ***********************/
-long getInputAsLong(void)
+long getInput(void)
 {
   // converting inputed string to long based on  https://forum.arduino.cc/index.php?topic=396450.0
   static byte ndx = 0;
@@ -90,6 +126,9 @@ long getInputAsLong(void)
 }
 
 
+
+
+
 /**********************
 * checkPrime will determine if the integer is prime
 **********************/
@@ -114,8 +153,6 @@ bool checkPrime(long inputedInt)
    else 
      cutOff = inputedInt/2;
 
-
- 
    while (j <= (cutOff) && isPrime) //  decrement j in the while loop until a factor (j) is found or get up to half of the number being tested for primeness.
    {
       if (inputedInt % j == 0) // means i was divisible by j and therefore has a factor, so NOT prime
