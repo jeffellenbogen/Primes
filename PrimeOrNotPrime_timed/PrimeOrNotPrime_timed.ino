@@ -25,27 +25,32 @@ void getMode()
   Serial.println("Choose how to calculate whether an integer is prime...");
   Serial.println("1. halfCandidateMode ");
   Serial.println("2. sqrtMode");
-
-  long modeSelected = getInput();
-  if (newData)
+  while (!newData)
   {
-    if (modeSelected == 1)
+    long modeSelected = getInput();
+    if (newData)
     {
-      Serial.println("modeSelected = halfCandidateMode");
       sqrtMode = true;
-    }
-    else if (modeSelected == 2)
-    {
-      Serial.println("modeSelected = sqrtMode");
-      sqrtMode = false;
-    }
-    else
-    {
-      Serial.println("error! selecting sqrtMode automatically");
-      sqrtMode = true;
-    }
+      if (modeSelected == 1)
+      {
+        Serial.println("modeSelected = halfCandidateMode");
+        sqrtMode = false;
+      }
+      else if (modeSelected == 2)
+      {
+        Serial.println("modeSelected = sqrtMode");
+        sqrtMode = true;
+      }
+      else
+      {
+        Serial.println("error! selecting sqrtMode automatically because it is faster");
+        sqrtMode = true;
+      }
+    }  
   }
   newData = false;
+  Serial.println("");
+  Serial.println("Enter an integer to determine if it is prime or not...");
 }
 
 
