@@ -30,7 +30,6 @@ void getMode()
     long modeSelected = getInput();
     if (newData)
     {
-      sqrtMode = true;
       if (modeSelected == 1)
       {
         Serial.println("modeSelected = halfCandidateMode");
